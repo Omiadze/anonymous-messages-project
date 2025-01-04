@@ -1,5 +1,5 @@
-import "./App.css";
-import "./index.css"; // This should import your Tailwind CSS
+import './App.css';
+import './index.css'; // This should import your Tailwind CSS
 
 function App() {
   return (

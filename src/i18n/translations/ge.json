@@ -1,0 +1,34 @@
+{
+  "greeting": "გამარჯობა, კეთილი იყოს თქვენი მობრძანება ჩვენს აპლიკაციაში!",
+  "menu": {
+    "home": "მთავარი",
+    "about": "ჩვენ შესახებ",
+    "contact": "კონტაქტი"
+  },
+  "language": {
+    "english": "ქართული",
+    "georgian": "ინგლისური"
+  },
+  "validation": {
+    "email-required": "ელ.ფოსტა აუცილებელია",
+    "email-invalid": "გთხოვთ შეიყვანოთ ვალიდური ელ.ფოსტა",
+    "password-required": "პაროლი აუცილებელია",
+    "password-min-length": "პაროლი უნდა შეიცავდეს მინიმუმ 6 სიმბოლოს",
+    "password-max-length": "პაროლი არ უნდა აღემატებოდეს 20 სიმბოლოს",
+    "default-error": "Error"
+  },
+  "sign-in-title": "შედით ANONYMOUS-ზე",
+  "sign-in-subtitle": "შეიყვანეთ თქვენი მონაცემები ანგარიშზე შესასვლელად",
+  "email": "ელ.ფოსტა",
+  "email-placeholder": "შეიყვანეთ თქვენი ელ.ფოსტა",
+  "password": "პაროლი",
+  "password-placeholder": "შეიყვანეთ თქვენი პაროლი",
+  "sign-in": "შესვლა",
+  "no-account": "ანგარიში არ გაქვთ?",
+  "sign-up": "რეგისტრაცია",
+  "sign-up-title": "რეგისტრაცია ANONYMOUS-ზე",
+  "sign-up-subtitle": "შეიყვანეთ თქვენი მონაცემები ანგარიშის შესაქმნელად",
+  "confirm-password": "დაადასტურეთ პაროლი",
+  "confirm-password-placeholder": "დაადასტურეთ თქვენი პაროლი",
+  "already-have-account": "უკვე გაქვთ ანგარიში?"
+}

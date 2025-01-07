@@ -1,0 +1,34 @@
+{
+  "greeting": "Hello, welcome to our application!",
+  "menu": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "language": {
+    "english": "English",
+    "georgian": "Georgian"
+  },
+  "validation": {
+    "email-required": "Email is required",
+    "email-invalid": "Please enter a valid email address",
+    "password-required": "Password is required",
+    "password-min-length": "Password must be at least 6 characters long",
+    "password-max-length": "Password cannot exceed 20 characters",
+    "default-error": "Error"
+  },
+  "sign-in-title": "Log in to ANONYMOUS",
+  "sign-in-subtitle": "Enter your credentials to access your account",
+  "email": "Email",
+  "email-placeholder": "Enter your email",
+  "password": "Password",
+  "password-placeholder": "Enter your password",
+  "sign-in": "Sign In",
+  "no-account": "Don't have an account?",
+  "sign-up": "Sign Up",
+  "sign-up-title": "Sign Up to BitBlogs",
+  "sign-up-subtitle": "Enter your credentials to create your account",
+  "confirm-password": "Confirm Password",
+  "confirm-password-placeholder": "Confirm your password",
+  "already-have-account": "Already have an account?"
+}

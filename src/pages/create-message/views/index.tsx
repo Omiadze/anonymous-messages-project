@@ -1,4 +1,3 @@
-
 const CreateMessageView = () => {
   return <div>CreateMessageView</div>;
 };

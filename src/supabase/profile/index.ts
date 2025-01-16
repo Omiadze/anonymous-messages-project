@@ -1,0 +1,66 @@
+import { MessagesType } from '@/pages/home/components/messages/index.types';
+import { supabase } from '..';
+import { FillProfileInfoPayload } from './index.types';
+
+export const fillProfileInfo = async (payload: FillProfileInfoPayload) => {
+  const { error } = await supabase.from('profiles').upsert(payload);
+  if (error) throw error;
+  return { success: true };
+};
+
+export const getProfileInfo = async (id: string | number) => {
+  return supabase.from('profiles').select('*').eq('id', id);
+};
+
+export const postMessages = async (
+  from: string,
+  to: string,
+  message: string,
+  avatar: string,
+  user_id: string
+) => {
+  return supabase.from('messages').insert({
+    from,
+    to,
+    message,
+    avatar,
+    user_id,
+  });
+};
+
+export const getMessages = async (): Promise<MessagesType[]> => {
+  const { data, error } = await supabase
+    .from('messages')
+    .select('*')
+    .throwOnError();
+
+  if (error) {
+    console.error('Error fetching messages:', error);
+    throw error;
+  }
+
+  console.log('Fetched messages:', data);
+
+  return data as MessagesType[]; // Assert the type
+};
+
+export const deleteMessage = async (messageId: string | number) => {
+  await supabase.from('messages').delete().eq('id', messageId).throwOnError();
+  return { success: true };
+};
+
+export const updateMessage = async (
+  messageId: string | number,
+  payload: Partial<{
+    from: string;
+    to: string;
+    message: string;
+  }>
+) => {
+  await supabase
+    .from('messages')
+    .update(payload)
+    .eq('id', messageId)
+    .throwOnError();
+  return { success: true };
+};

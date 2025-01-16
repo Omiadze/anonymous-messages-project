@@ -17,6 +17,11 @@
     "password-max-length": "Password cannot exceed 20 characters",
     "default-error": "Error"
   },
+  "your-username": "Username:",
+  "your-full_name": "Name and Lastname:",
+  "choose-avatar": "Choose Your Avatar:",
+  "profile": "Profile",
+  "personal-info": "Update your personal information",
   "sign-in-title": "Log in to ANONYMOUS",
   "sign-in-subtitle": "Enter your credentials to access your account",
   "email": "Email",
@@ -30,5 +35,12 @@
   "sign-up-subtitle": "Enter your credentials to create your account",
   "confirm-password": "Confirm Password",
   "confirm-password-placeholder": "Confirm your password",
-  "already-have-account": "Already have an account?"
+  "already-have-account": "Already have an account?",
+  "from": "From:",
+  "to": "To:",
+  "message": "Message:",
+  "send": "Send",
+  "from-placeholder": "Enter sender's name",
+  "to-placeholder": "Enter recipient's name",
+  "message-placeholder": "Write your message here..."
 }

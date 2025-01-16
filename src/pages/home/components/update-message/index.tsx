@@ -19,11 +19,11 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
   console.log('message', message);
   const { control, handleSubmit, formState } = useForm({
     defaultValues: {
-      from: message.from,
-      to: message.to,
-      message: message.message,
-      avatar: message.avatar,
-      user_id: message.user_id,
+      from: message.from || undefined, // Convert null to undefined
+      to: message.to || undefined,
+      message: message.message || undefined,
+      avatar: message.avatar || undefined,
+      user_id: message.user_id || undefined,
     },
   });
 
@@ -38,17 +38,19 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
   const { mutate: updateMessageMutate } = useUpdateMessage(onSuccess, onError);
 
   const onSubmit = (values: {
-    from: string;
-    to: string;
-    message: string;
-    avatar: string;
-    user_id: string;
+    from: string | undefined;
+    to: string | undefined;
+    message: string | undefined;
+    avatar: string | undefined;
+    user_id: string | undefined;
   }) => {
     console.log(values);
-    updateMessageMutate({
-      messageId: message.id,
-      data: values,
-    });
+    if (message.id != null) {
+      updateMessageMutate({
+        messageId: message.id,
+        data: values,
+      });
+    }
   };
   return (
     <div>

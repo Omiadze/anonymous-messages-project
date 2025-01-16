@@ -13,18 +13,14 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '@/context/hooks/use-auth-context';
 import { Textarea } from '@/components/ui/textarea';
-import { useQuery } from '@tanstack/react-query';
 import { usePostMessages } from '@/react-query/mutation';
-import { getProfileInfo } from '@/supabase/profile';
+import { useGetProfileInfo } from '@/react-query/query';
 
 const CreateMessageView = () => {
   const { t } = useTranslation();
   const { user } = useAuthContext();
-  const { data, isSuccess } = useQuery({
-    queryKey: ['get-profile-info', user?.user.id],
-    queryFn: () => getProfileInfo(user ? user?.user.id : ''),
-    enabled: !!user?.user.id,
-  });
+
+  const { data, isSuccess } = useGetProfileInfo(user?.user.id);
 
   const { control, handleSubmit, formState, reset } = useForm({
     defaultValues: {

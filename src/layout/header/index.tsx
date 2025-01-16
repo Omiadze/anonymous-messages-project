@@ -13,6 +13,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { LogOut } from 'lucide-react';
@@ -56,7 +57,7 @@ const Header = () => {
       />
       <div className="flex gap-3">
         {user ? (
-          <>
+          <div className="hidden md:block">
             <DropdownMenu>
               <DropdownMenuTrigger className="inline-flex items-center    justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 dark:focus-visible:ring-neutral-300 border border-neutral-200 bg-white shadow-sm hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800  dark:hover:bg-neutral-800 dark:hover:text-neutral-50 h-9 w-9 hover:scale-105  duration-300 dark:bg-black">
                 <Avatar className="h-10 w-10 border-2 border-primary cursor-pointer">
@@ -81,7 +82,7 @@ const Header = () => {
                     handleLogout();
                   }}
                 >
-                  <LogOut />
+                  <LogOut className="text-primary" />
                   <Button
                     variant="ghost"
                     className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 dark:focus-visible:ring-neutral-300 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50 h-9 py-2 w-full px-6"
@@ -91,10 +92,10 @@ const Header = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </>
+          </div>
         ) : (
           <>
-            <NavLink to={'login'}>
+            <NavLink className="hidden md:block" to={'login'}>
               <Button>Login</Button>
             </NavLink>
           </>
@@ -102,6 +103,69 @@ const Header = () => {
 
         <LanguageSwitcher />
         <ModeToggle />
+        <DropdownMenu>
+          <DropdownMenuTrigger className="block md:hidden ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="lucide lucide-align-justify"
+            >
+              <path d="M3 12h18" />
+              <path d="M3 18h18" />
+              <path d="M3 6h18" />
+            </svg>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuSeparator />
+            {!user ? (
+              <NavLink to="login">
+                <DropdownMenuItem>{t('sign-in')}</DropdownMenuItem>
+              </NavLink>
+            ) : (
+              <>
+                <DropdownMenuItem onClick={navigateToProfile}>
+                  <Avatar className="h-10 w-10 border-2 border-primary cursor-pointer">
+                    <AvatarImage
+                      src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${data?.data?.[0]?.avatar_url || 'ANONYMOUS'}`}
+                      alt="Profile Picture"
+                    />
+                    <AvatarFallback className="text-xs">
+                      ANONYMOUS
+                    </AvatarFallback>
+                  </Avatar>
+                  <Button
+                    variant="ghost"
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 dark:focus-visible:ring-neutral-300 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50 h-9 py-2 w-full px-6"
+                  >
+                    {t('profile')}
+                  </Button>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    handleLogout();
+                  }}
+                >
+                  <LogOut className="text-primary" />
+                  <Button
+                    variant="ghost"
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 dark:focus-visible:ring-neutral-300 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50 h-9 py-2 w-full px-6"
+                  >
+                    {t('sign-out')}
+                  </Button>
+                </DropdownMenuItem>
+              </>
+            )}
+
+            {/* <DropdownMenuItem>Add Question</DropdownMenuItem> only appears if user is logged in */}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

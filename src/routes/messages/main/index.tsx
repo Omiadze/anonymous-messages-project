@@ -22,9 +22,7 @@ export const MAIN_ROUTES = [
     path={MAIN_PATHS.MESSAGES_CREATE}
     element={
       <Suspense fallback={<Skeleton />}>
-        <MainGuard>
-          <LazyCreateMessages />
-        </MainGuard>
+        <LazyCreateMessages />
       </Suspense>
     }
   />,

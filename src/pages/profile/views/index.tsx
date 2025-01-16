@@ -12,8 +12,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { fillProfileInfo, getProfileInfo } from '@/supabase/profile';
-import { useMutation, useQuery } from '@tanstack/react-query';
+
 import { useAuthContext } from '@/context/hooks/use-auth-context';
 import { useEffect } from 'react';
 import { Select } from '@radix-ui/react-select';
@@ -23,17 +22,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useGetProfileInfo } from '@/react-query/query';
+import { useFillProfileInfo } from '@/react-query/mutation';
 
 const ProfilePage = () => {
-  //   const queryClient = useQueryClient();
-
   const { user } = useAuthContext();
 
-  const { data, isSuccess } = useQuery({
-    queryKey: ['get-profile-info', user?.user.id],
-    queryFn: () => getProfileInfo(user ? user?.user.id : ''),
-    enabled: !!user?.user.id, // Only fetch if user ID exists
-  });
+  const { data, isSuccess } = useGetProfileInfo(user?.user.id);
+
+  const { mutate: handleFillProfileInfo } = useFillProfileInfo();
+
   const { control, handleSubmit, formState, reset } = useForm({
     defaultValues: ProfileDefaultValues,
   });
@@ -49,16 +47,7 @@ const ProfilePage = () => {
   }, [isSuccess, data, reset]);
 
   const { t } = useTranslation();
-  const { mutate: handleFillProfileInfo } = useMutation({
-    mutationKey: ['fill-profile-info'],
-    mutationFn: fillProfileInfo,
-    onSuccess: (data) => {
-      // Reset form with updated data
-      // reset(data as any);
-      console.log('Profile updated successfully:', data);
-      window.location.reload();
-    },
-  });
+
   const onSubmit = (values: {
     username: string;
     full_name: string;

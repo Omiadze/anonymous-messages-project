@@ -2,13 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Controller, useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { register } from '@/supabase/auth';
 import { toast } from 'react-toastify';
-// import { useEffect } from "react";
 import { RegisterDefaultValues } from './default-values';
 import { useNavigate, useParams } from 'react-router-dom';
-// import { useLocation } from "react-router-dom";
+import { useRegister } from '@/react-query/mutation';
+import { AUTH_PATHS } from '@/routes/messages/index.enum';
 
 function Register() {
   const { t } = useTranslation();
@@ -19,12 +17,8 @@ function Register() {
     defaultValues: RegisterDefaultValues,
   });
 
-  const { mutate: handleRegister } = useMutation({
-    mutationKey: ['register'],
-    mutationFn: register,
-    onSuccess: () => {
-      navigate('login');
-    },
+  const { mutate: handleRegister } = useRegister(() => {
+    navigate(AUTH_PATHS.LOGIN);
   });
 
   const onSubmit = (data: {
@@ -42,14 +36,6 @@ function Register() {
     handleRegister({ email, password });
     console.log(email, password);
   };
-  // using triger and reset for form validations
-  // useEffect(() => {
-  //   trigger();
-  // }, [i18n.language, trigger]);
-
-  // useEffect(() => {
-  //   return () => reset(SignUpInfoValuesDefault);
-  // }, [reset, location.pathname]);
 
   return (
     <div className="flex h-screen items-center justify-center ">

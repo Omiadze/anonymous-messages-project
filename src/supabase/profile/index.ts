@@ -28,11 +28,16 @@ export const postMessages = async (
   });
 };
 
-export const getMessages = async (): Promise<MessagesType[]> => {
-  const { data, error } = await supabase
+export const getMessages = async (
+  page: number,
+  pageSize: number
+): Promise<{ messages: MessagesType[]; totalCount: number }> => {
+  const offset = (page - 1) * pageSize;
+
+  const { data, error, count } = await supabase
     .from('messages')
-    .select('*')
-    .throwOnError();
+    .select('*', { count: 'exact' })
+    .range(offset, offset + pageSize - 1);
 
   if (error) {
     console.error('Error fetching messages:', error);
@@ -41,7 +46,10 @@ export const getMessages = async (): Promise<MessagesType[]> => {
 
   console.log('Fetched messages:', data);
 
-  return data as MessagesType[]; // Assert the type
+  return {
+    messages: data, // Ensure it returns an array, even if `data` is null
+    totalCount: count || 0, // Provide a default of 0 for count if not available
+  };
 };
 
 export const deleteMessage = async (messageId: string | number) => {

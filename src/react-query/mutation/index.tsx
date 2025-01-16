@@ -1,4 +1,10 @@
-import { deleteMessage, postMessages, updateMessage } from '@/supabase/profile';
+import { login, register } from '@/supabase/auth';
+import {
+  deleteMessage,
+  fillProfileInfo,
+  postMessages,
+  updateMessage,
+} from '@/supabase/profile';
 import { useMutation } from '@tanstack/react-query';
 
 export const usePostMessages = (onSuccess: () => void, onError: () => void) => {
@@ -47,5 +53,41 @@ export const useUpdateMessage = (
     }) => updateMessage(payload.messageId, payload.data),
     onSuccess,
     onError,
+  });
+};
+
+export const useFillProfileInfo = () => {
+  return useMutation({
+    mutationKey: ['fill-profile-info'],
+    mutationFn: fillProfileInfo,
+    onSuccess: (data) => {
+      console.log('Profile updated successfully:', data);
+      window.location.reload();
+    },
+  });
+};
+
+export const useLogin = (onSuccessCallback: () => void) => {
+  return useMutation({
+    mutationKey: ['login'],
+    mutationFn: login,
+    onSuccess: (data) => {
+      console.log('User signed in:', data);
+      onSuccessCallback();
+    },
+  });
+};
+
+export const useRegister = (onSuccessCallback: () => void) => {
+  return useMutation({
+    mutationKey: ['register'],
+    mutationFn: register,
+    onSuccess: () => {
+      console.log('User registered successfully');
+      onSuccessCallback();
+    },
+    onError: (error) => {
+      console.error('Error registering user:', error);
+    },
   });
 };

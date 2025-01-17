@@ -7,7 +7,7 @@ const MainGuard: React.FC<PropsWithChildren> = ({ children }) => {
   const { user } = useAuthContext();
 
   if (!user) {
-    return <Navigate to={'/login'} />;
+    return <Navigate to={'/en/login'} />;
   }
   return children || <Outlet />;
 };

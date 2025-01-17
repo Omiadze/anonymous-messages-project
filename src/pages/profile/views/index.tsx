@@ -62,7 +62,7 @@ const ProfilePage = () => {
     handleFillProfileInfo({ ...values, id: user.user.id });
   };
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full  ">
       <CardHeader className="space-y-1 text-center flex flex-row gap-6 ">
         <div className="flex flex-col items-center gap-4">
           <Avatar className="h-20 w-20 border-2 border-primary">

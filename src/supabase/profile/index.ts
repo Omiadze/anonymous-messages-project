@@ -30,13 +30,15 @@ export const postMessages = async (
 
 export const getMessages = async (
   page: number,
-  pageSize: number
+  pageSize: number,
+  searchText: string
 ): Promise<{ messages: MessagesType[]; totalCount: number }> => {
   const offset = (page - 1) * pageSize;
 
   const { data, error, count } = await supabase
     .from('messages')
     .select('*', { count: 'exact' })
+    .like('message', `%${searchText}%`)
     .range(offset, offset + pageSize - 1);
 
   if (error) {

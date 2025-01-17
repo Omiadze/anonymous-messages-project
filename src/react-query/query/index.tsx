@@ -14,10 +14,14 @@ type MessagesData = {
   totalCount: number; // Total count of messages
 };
 
-export const useMessages = (page: number, pageSize: number) => {
+export const useMessages = (
+  page: number,
+  pageSize: number,
+  searchText: string
+) => {
   return useQuery<MessagesData>({
-    queryKey: ['get-messages', page, pageSize],
-    queryFn: () => getMessages(page, pageSize),
+    queryKey: ['get-messages', page, pageSize, searchText],
+    queryFn: () => getMessages(page, pageSize, searchText),
     //   keepPreviousData: true, // Keeps the previous page's data while fetching new data
   });
 };

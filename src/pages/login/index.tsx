@@ -25,7 +25,6 @@ function Login() {
 
   const onSubmit = (data: { email: string; password: string }) => {
     const { email, password } = data;
-
     handleLogin({ email, password });
   };
 

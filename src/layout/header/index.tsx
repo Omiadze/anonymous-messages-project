@@ -32,7 +32,8 @@ const Header = () => {
   });
 
   const handleOnClickLogo = () => {
-    navigate('/');
+    navigate('/en/');
+    window.location.reload();
   };
   const navigateToProfile = () => {
     navigate(MAIN_PATHS.PROFILE);

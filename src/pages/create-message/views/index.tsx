@@ -15,10 +15,12 @@ import { useAuthContext } from '@/context/hooks/use-auth-context';
 import { Textarea } from '@/components/ui/textarea';
 import { usePostMessages } from '@/react-query/mutation';
 import { useGetProfileInfo } from '@/react-query/query';
+import { useNavigate } from 'react-router-dom';
 
 const CreateMessageView = () => {
   const { t } = useTranslation();
   const { user } = useAuthContext();
+  const navigate = useNavigate();
 
   const { data, isSuccess } = useGetProfileInfo(user?.user.id);
 
@@ -60,6 +62,7 @@ const CreateMessageView = () => {
 
   const onSuccess = () => {
     alert('Message sent successfully!');
+    navigate('/');
   };
 
   const onError = () => {

@@ -11,8 +11,10 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useDeleteMessage } from '@/react-query/mutation';
 import { Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const DeleteMessage = ({ messageId }: { messageId: number }) => {
+  const { t } = useTranslation();
   const onDeleteSuccess = () => {
     console.log('Message deleted successfully');
     setTimeout(() => {
@@ -39,16 +41,15 @@ const DeleteMessage = ({ messageId }: { messageId: number }) => {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>{t('are-you-sure')}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            message and remove data from our servers.
+            {t('action-undo-warning')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction onClick={() => handleDelete(messageId)}>
-            Continue
+            {t('delete')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

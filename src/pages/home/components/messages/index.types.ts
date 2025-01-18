@@ -6,4 +6,5 @@ export type MessagesType = {
   message: string | null;
   to: string | null;
   user_id: string | null;
+  likes: number | null;
 };

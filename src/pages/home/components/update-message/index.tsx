@@ -5,7 +5,6 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -56,7 +55,6 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
     <div>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription className="flex flex-col gap-3">
             <div className="flex justify-start items-center gap-1">
               <label htmlFor="from" className="w-24 text-start">
@@ -162,7 +160,7 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction
             type="button"
             onClick={() => {
@@ -172,7 +170,7 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
               }, 500); // Delay for 1 second
             }}
           >
-            Continue
+            {t('update')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

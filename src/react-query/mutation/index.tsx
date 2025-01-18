@@ -49,7 +49,12 @@ export const useUpdateMessage = (
     mutationKey: ['update-message'],
     mutationFn: (payload: {
       messageId: string | number;
-      data: Partial<{ from: string; to: string; message: string }>;
+      data: Partial<{
+        from: string;
+        to: string;
+        message: string;
+        likes: number;
+      }>;
     }) => updateMessage(payload.messageId, payload.data),
     onSuccess,
     onError,

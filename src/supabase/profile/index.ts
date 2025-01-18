@@ -38,8 +38,11 @@ export const getMessages = async (
   const { data, error, count } = await supabase
     .from('messages')
     .select('*', { count: 'exact' })
-    .like('message', `%${searchText}%`)
-    .range(offset, offset + pageSize - 1);
+    .or(
+      `message.ilike.%${searchText}%,from.ilike.%${searchText}%,to.ilike.%${searchText}%`
+    )
+    .range(offset, offset + pageSize - 1)
+    .order('created_at', { ascending: false });
 
   if (error) {
     console.error('Error fetching messages:', error);
@@ -49,8 +52,8 @@ export const getMessages = async (
   console.log('Fetched messages:', data);
 
   return {
-    messages: data, // Ensure it returns an array, even if `data` is null
-    totalCount: count || 0, // Provide a default of 0 for count if not available
+    messages: data,
+    totalCount: count || 0,
   };
 };
 
@@ -65,6 +68,7 @@ export const updateMessage = async (
     from: string;
     to: string;
     message: string;
+    likes: number;
   }>
 ) => {
   await supabase
@@ -74,3 +78,5 @@ export const updateMessage = async (
     .throwOnError();
   return { success: true };
 };
+
+// Mutation to handle liking a message

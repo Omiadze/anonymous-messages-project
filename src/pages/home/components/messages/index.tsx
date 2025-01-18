@@ -9,7 +9,7 @@ import {
 import { useAuthContext } from '@/context/hooks/use-auth-context';
 import { Avatar } from '@radix-ui/react-avatar';
 import { MessagesType } from './index.types';
-import { PencilIcon, ShieldQuestion } from 'lucide-react';
+import { Heart, PencilIcon, ShieldQuestion } from 'lucide-react';
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import UpdateMessage from '../update-message';
 import DeleteMessage from '../delete-message';
@@ -27,18 +27,33 @@ import {
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import qs from 'qs';
 import debounce from 'lodash.debounce';
+import Loading from '@/components/loading';
+import { useUpdateMessage } from '@/react-query/mutation';
+import { useTranslation } from 'react-i18next';
 
 type MessagesSearchDefaultValue = {
   searchText: string;
 };
 
 const Messages = () => {
+  const { lang } = useParams();
   const { user } = useAuthContext();
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const parsedQueryParams = qs.parse(searchParams.toString());
+  const onSuccess = () => {
+    console.log('Message updated successfully');
+    refetch();
+  };
+
+  const onError = () => {
+    console.error('Failed to update message');
+  };
+
+  const { mutate: updateMessageMutate } = useUpdateMessage(onSuccess, onError);
 
   const searchTextFromParams =
     typeof parsedQueryParams.searchText === 'string'
@@ -54,7 +69,7 @@ const Messages = () => {
   const [page, setPage] = useState(1);
   const pageSize = 5;
 
-  const { data, isLoading, error } = useMessages(
+  const { data, isLoading, error, refetch } = useMessages(
     page,
     pageSize,
     searchTextFromParams
@@ -82,6 +97,20 @@ const Messages = () => {
 
   if (error) return <p>Failed to load messages</p>;
 
+  const handleLike = (messageId: number, likes: number) => {
+    console.log('Message ID:', messageId);
+    console.log('Current Likes:', likes);
+    const newLikes = likes ? likes + 1 : 1; // Avoid `null`
+    console.log('New Likes:', newLikes);
+    const values = { likes: newLikes };
+    if (messageId != null) {
+      updateMessageMutate({
+        messageId: messageId,
+        data: values,
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col gap  ">
       <div className="flex gap-2 mb-2">
@@ -98,7 +127,7 @@ const Messages = () => {
                     updateSearch(e.target.value); // Trigger debounce
                   }}
                   value={value}
-                  placeholder="Search..."
+                  placeholder={t('search')}
                 />
               </>
             );
@@ -107,17 +136,27 @@ const Messages = () => {
         {/* <Button onClick={handleSubmit(onSubmit)}>Search</Button> */}
       </div>
       {isLoading ? (
-        <p>Loading messages...</p>
+        <Loading />
       ) : messages.length === 0 ? (
         <p>No Messaes found</p>
       ) : (
         <div>
           {messages?.map((message: MessagesType) => (
-            <>
-              <Card
-                key={message.id}
-                className="flex justify-between relative min-w-[350]"
-              >
+            <div key={message.id}>
+              <Card className="flex justify-between relative min-w-[350]">
+                <div className="absolute left-1 top-1">
+                  <button
+                    className="flex items-center gap-1 text-primary"
+                    onClick={() => {
+                      if (message.id != null && message.likes != null) {
+                        handleLike(message.id, message.likes);
+                      }
+                    }}
+                  >
+                    <Heart className="w-4 h-4  text-primary hover:text-destructive hover:fill-current" />
+                    <span className="text-xs">{message.likes}</span>
+                  </button>
+                </div>
                 <div>
                   {message?.user_id == user?.user.id ? (
                     <div className="absolute bottom-1 right-1 flex gap-2">
@@ -136,11 +175,12 @@ const Messages = () => {
                   <CardHeader className="max-w-[270px]">
                     <CardTitle className="text-start text-xs flex flex-col gap-2 mb-2">
                       <p>
-                        <span className="text-primary ">FROM:</span>{' '}
+                        <span className="text-primary ">{t('from')}</span>{' '}
                         {message.from}
                       </p>
                       <p>
-                        <span className="text-logo">TO:</span> {message.to}
+                        <span className="text-logo">{t('to')}</span>{' '}
+                        {message.to}
                       </p>
                     </CardTitle>
                     <CardDescription className="text-start max-w-[270px] h-full break-words ">
@@ -149,8 +189,11 @@ const Messages = () => {
                   </CardHeader>
                   <div className="flex justify-between p-1">
                     <p className="text-xs text-start text-muted-foreground  pt-5">
-                      <span className="font-bold">Created at:</span>{' '}
-                      {setMessageCreationTime(message.created_at || '')}
+                      <span className="font-bold">{t('created-at')}</span>{' '}
+                      {setMessageCreationTime(
+                        message.created_at || '',
+                        lang || ''
+                      )}
                     </p>
                   </div>
                 </div>
@@ -179,7 +222,7 @@ const Messages = () => {
                 </CardFooter>
               </Card>
               <div className="h-3 w-full bg-primary rounded-b-md mb-6"></div>
-            </>
+            </div>
           ))}
           {/* <Button onClick={handlePreviousPage} disabled={page === 1}>
         prev

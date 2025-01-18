@@ -1,6 +1,7 @@
 import { MessagesType } from '@/pages/home/components/messages/index.types';
 import { supabase } from '..';
 import { FillProfileInfoPayload } from './index.types';
+import dayjs from 'dayjs';
 
 export const fillProfileInfo = async (payload: FillProfileInfoPayload) => {
   const { error } = await supabase.from('profiles').upsert(payload);
@@ -31,18 +32,29 @@ export const postMessages = async (
 export const getMessages = async (
   page: number,
   pageSize: number,
-  searchText: string
+  searchText: string,
+  date: string
 ): Promise<{ messages: MessagesType[]; totalCount: number }> => {
   const offset = (page - 1) * pageSize;
+  const filters = `message.ilike.%${searchText}%,from.ilike.%${searchText}%,to.ilike.%${searchText}%`;
 
-  const { data, error, count } = await supabase
+  // Initialize the query
+  let query = supabase
     .from('messages')
     .select('*', { count: 'exact' })
-    .or(
-      `message.ilike.%${searchText}%,from.ilike.%${searchText}%,to.ilike.%${searchText}%`
-    )
+    .or(filters)
     .range(offset, offset + pageSize - 1)
     .order('created_at', { ascending: false });
+
+  // Add date filters if a date is provided
+  if (date) {
+    const todayStart = dayjs().startOf('day').toISOString();
+    const todayEnd = dayjs().endOf('day').toISOString();
+    query = query.gte('created_at', todayStart).lt('created_at', todayEnd);
+  }
+
+  // Execute the query
+  const { data, error, count } = await query;
 
   if (error) {
     console.error('Error fetching messages:', error);

@@ -33,6 +33,8 @@ import debounce from 'lodash.debounce';
 import Loading from '@/components/loading';
 import { useUpdateMessage } from '@/react-query/mutation';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
+import dayjs from 'dayjs';
 
 type MessagesSearchDefaultValue = {
   searchText: string;
@@ -42,6 +44,8 @@ const Messages = () => {
   const { lang } = useParams();
   const { user } = useAuthContext();
   const { t } = useTranslation();
+  const [clicked, setClicked] = useState(false);
+  const [date, setDate] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
   const parsedQueryParams = qs.parse(searchParams.toString());
   const onSuccess = () => {
@@ -72,7 +76,8 @@ const Messages = () => {
   const { data, isLoading, error, refetch } = useMessages(
     page,
     pageSize,
-    searchTextFromParams
+    searchTextFromParams,
+    date
   );
 
   const messages = data?.messages || [];
@@ -110,10 +115,30 @@ const Messages = () => {
       });
     }
   };
+  const handleBtnClick = () => {
+    const todayDate = dayjs().format('YYYY-MM-DD');
+    if (clicked == false) {
+      setDate(() => todayDate);
+    } else setDate(() => '');
+    setClicked((prevState) => !prevState);
+    console.log(clicked);
+    console.log(date);
+  };
 
   return (
     <div className="flex flex-col gap  ">
       <div className="flex gap-2 mb-2">
+        <Button
+          variant={'outline'}
+          onClick={handleBtnClick}
+          className={
+            clicked
+              ? 'bg-logo text-white hover:bg-logo hover:text-white'
+              : 'hover:bg-logo hover:text-white'
+          }
+        >
+          Today
+        </Button>
         <Controller
           control={control}
           name="searchText"

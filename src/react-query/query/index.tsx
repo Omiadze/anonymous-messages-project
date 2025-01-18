@@ -17,11 +17,12 @@ type MessagesData = {
 export const useMessages = (
   page: number,
   pageSize: number,
-  searchText: string
+  searchText: string,
+  date: string
 ) => {
   return useQuery<MessagesData>({
-    queryKey: ['get-messages', page, pageSize, searchText],
-    queryFn: () => getMessages(page, pageSize, searchText),
+    queryKey: ['get-messages', page, pageSize, searchText, date],
+    queryFn: () => getMessages(page, pageSize, searchText, date),
     //   keepPreviousData: true, // Keeps the previous page's data while fetching new data
   });
 };

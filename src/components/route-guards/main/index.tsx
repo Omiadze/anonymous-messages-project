@@ -1,11 +1,12 @@
 import React, { PropsWithChildren } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 const MainGuard: React.FC<PropsWithChildren> = ({ children }) => {
-  const userId = localStorage.getItem('userId');
+  const user = localStorage.getItem('userSession');
+  const location = useLocation();
 
-  if (!userId) {
-    return <Navigate to={'/en/login'} />;
+  if (!user) {
+    return <Navigate state={{ from: location }} to={`/en/login`} />;
   }
   return children || <Outlet />;
 };

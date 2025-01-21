@@ -26,6 +26,8 @@ import { useGetProfileInfo } from '@/react-query/query';
 import { useFillProfileInfo } from '@/react-query/mutation';
 import { ProfileValues } from './types';
 import { ShieldQuestion } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import PersonalMessages from '../personal-messages';
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -60,168 +62,179 @@ const ProfilePage = () => {
     handleFillProfileInfo({ ...values, id: user.user.id });
   };
   return (
-    <Card className="w-full mb- ">
-      <CardHeader className="space-y-1 text-center flex flex-row gap-6 ">
-        <div className="flex flex-col items-center gap-4">
-          <Avatar className="h-12 w-12 border-2 border-primary cursor-pointer rounded-full p-2 text-center">
-            {data?.avatar_url ? (
-              <AvatarImage
-                src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${data?.avatar_url || 'ANONYMOUS'}`}
-                alt="Profile Picture"
-              />
-            ) : (
-              <div className="flex justify-center items-center w-full">
-                <ShieldQuestion className="text-center" />
-              </div>
-            )}
-            {/* <AvatarImage
+    <Tabs defaultValue="account" className="w-[400px] h-screen">
+      <TabsList className="grid w-full grid-cols-2 mb-7">
+        <TabsTrigger value="account">{t('profile')}</TabsTrigger>
+        <TabsTrigger value="messages">{t('your-messages')}</TabsTrigger>
+      </TabsList>
+      <TabsContent value="account">
+        <Card className="w-full ">
+          <CardHeader className="space-y-1 text-center flex flex-row gap-6 ">
+            <div className="flex flex-col items-center gap-4">
+              <Avatar className="h-12 w-12 border-2 border-primary cursor-pointer rounded-full p-2 text-center">
+                {data?.avatar_url ? (
+                  <AvatarImage
+                    src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${data?.avatar_url || 'ANONYMOUS'}`}
+                    alt="Profile Picture"
+                  />
+                ) : (
+                  <div className="flex justify-center items-center w-full">
+                    <ShieldQuestion className="text-center" />
+                  </div>
+                )}
+                {/* <AvatarImage
                     src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${data?.data?.[0]?.avatar_url || 'ANONYMOUS'}`}
                     alt="Profile Picture"
                   /> */}
-          </Avatar>
-        </div>
-        <div>
-          <CardTitle className="text-2xl mb-4">{t('profile')}</CardTitle>
-          <CardDescription>{t('personal-info')}</CardDescription>
-        </div>
-      </CardHeader>
-      <CardContent className="grid gap-6">
-        <div className="grid gap-2 text-start">
-          <label htmlFor="username">{t('your-username')}</label>
-          <Controller
-            name="username"
-            control={control}
-            rules={{
-              required: 'validation.username-required',
-            }}
-            render={({ field: { onChange, value } }) => (
-              <div className="w-full">
-                <Input
-                  placeholder={t('username')}
-                  onChange={onChange}
-                  value={value}
-                  className="border border-muted-foreground"
-                />
-                {formState.errors?.username && (
-                  <p className="text-red-500">
-                    {t(
-                      formState.errors?.username?.message ??
-                        'validation.default-error'
+              </Avatar>
+            </div>
+            <div>
+              <CardTitle className="text-2xl mb-4">{t('profile')}</CardTitle>
+              <CardDescription>{t('personal-info')}</CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="grid gap-6">
+            <div className="grid gap-2 text-start">
+              <label htmlFor="username">{t('your-username')}</label>
+              <Controller
+                name="username"
+                control={control}
+                rules={{
+                  required: 'validation.username-required',
+                }}
+                render={({ field: { onChange, value } }) => (
+                  <div className="w-full">
+                    <Input
+                      placeholder={t('username')}
+                      onChange={onChange}
+                      value={value}
+                      className="border border-muted-foreground"
+                    />
+                    {formState.errors?.username && (
+                      <p className="text-red-500">
+                        {t(
+                          formState.errors?.username?.message ??
+                            'validation.default-error'
+                        )}
+                      </p>
                     )}
-                  </p>
+                  </div>
                 )}
-              </div>
-            )}
-          />
-        </div>
-        <div className="grid gap-2 text-start">
-          <label htmlFor="">{t('your-full_name')}</label>
-          <Controller
-            name="full_name"
-            control={control}
-            rules={{
-              required: 'validation.full_name-required',
-            }}
-            render={({ field: { onChange, value } }) => (
-              <div className="w-full">
-                <Input
-                  onChange={onChange}
-                  value={value}
-                  placeholder={t('full_name-placeholder')}
-                  type="text"
-                  className={`border ${
-                    formState.errors?.full_name
-                      ? 'border-red-500'
-                      : 'border-muted-foreground'
-                  }`}
-                />
-                {formState.errors?.full_name && (
-                  <p className="text-red-500">
-                    {t(
-                      formState.errors?.full_name?.message ??
-                        'validation.default-error'
+              />
+            </div>
+            <div className="grid gap-2 text-start">
+              <label htmlFor="">{t('your-full_name')}</label>
+              <Controller
+                name="full_name"
+                control={control}
+                rules={{
+                  required: 'validation.full_name-required',
+                }}
+                render={({ field: { onChange, value } }) => (
+                  <div className="w-full">
+                    <Input
+                      onChange={onChange}
+                      value={value}
+                      placeholder={t('full_name-placeholder')}
+                      type="text"
+                      className={`border ${
+                        formState.errors?.full_name
+                          ? 'border-red-500'
+                          : 'border-muted-foreground'
+                      }`}
+                    />
+                    {formState.errors?.full_name && (
+                      <p className="text-red-500">
+                        {t(
+                          formState.errors?.full_name?.message ??
+                            'validation.default-error'
+                        )}
+                      </p>
                     )}
-                  </p>
+                  </div>
                 )}
-              </div>
-            )}
-          />
-        </div>
-        <div className="grid gap-2 text-start">
-          <label htmlFor="">{t('choose-avatar')}</label>
-          <Controller
-            name="avatar_url"
-            control={control}
-            rules={{
-              required: 'Avatar selection is required',
-            }}
-            render={({ field: { onChange, value } }) => (
-              <div className="w-full ">
-                <Select
-                  onValueChange={(selectedValue) => onChange(selectedValue)} // Correctly binds to onChange
-                  value={value} // Synchronizes with the controlled field value
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select an avatar" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[
-                      { value: 'Eden', label: 'Eden' },
-                      { value: 'Sadie', label: 'Sadie' },
-                      { value: 'Sara', label: 'Sara' },
-                      { value: 'Oliver', label: 'Oliver' },
-                      { value: 'Mason', label: 'Mason' },
-                      { value: 'Amaya', label: 'Amaya' },
-                      { value: 'Alexander', label: 'Alexander' },
-                      { value: 'Jameson', label: 'Jameson' },
-                      { value: 'Brian', label: 'Brian' },
-                      { value: 'Brooklynn', label: 'Brooklynn' },
-                      { value: 'Aiden', label: 'Aiden' },
-                      { value: 'Sawyer', label: 'Sawyer' },
-                      { value: 'Sophia', label: 'Sophia' },
-                      { value: 'Destiny', label: 'Destiny' },
-                      { value: 'Kingston', label: 'Kingston' },
-                      { value: 'Caleb', label: 'Caleb' },
-                      { value: 'Chase', label: 'Chase' },
-                      { value: 'Aidan', label: 'Aidan' },
-                      { value: 'Adrian', label: 'Adrian' },
-                      { value: 'Leo', label: 'Leo' },
-                    ].map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        <div className="flex justify-center items-center gap-4 text-logo">
-                          <img
-                            className="w-9"
-                            src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${option.value}`}
-                            alt="avatar"
-                          />
-                          {option.label}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {formState.errors?.avatar_url && (
-                  <p className="text-red-500">
-                    {t(
-                      formState.errors.avatar_url.message ??
-                        'validation.default-error'
+              />
+            </div>
+            <div className="grid gap-2 text-start">
+              <label htmlFor="">{t('choose-avatar')}</label>
+              <Controller
+                name="avatar_url"
+                control={control}
+                rules={{
+                  required: 'Avatar selection is required',
+                }}
+                render={({ field: { onChange, value } }) => (
+                  <div className="w-full ">
+                    <Select
+                      onValueChange={(selectedValue) => onChange(selectedValue)} // Correctly binds to onChange
+                      value={value} // Synchronizes with the controlled field value
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select an avatar" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {[
+                          { value: 'Eden', label: 'Eden' },
+                          { value: 'Sadie', label: 'Sadie' },
+                          { value: 'Sara', label: 'Sara' },
+                          { value: 'Oliver', label: 'Oliver' },
+                          { value: 'Mason', label: 'Mason' },
+                          { value: 'Amaya', label: 'Amaya' },
+                          { value: 'Alexander', label: 'Alexander' },
+                          { value: 'Jameson', label: 'Jameson' },
+                          { value: 'Brian', label: 'Brian' },
+                          { value: 'Brooklynn', label: 'Brooklynn' },
+                          { value: 'Aiden', label: 'Aiden' },
+                          { value: 'Sawyer', label: 'Sawyer' },
+                          { value: 'Sophia', label: 'Sophia' },
+                          { value: 'Destiny', label: 'Destiny' },
+                          { value: 'Kingston', label: 'Kingston' },
+                          { value: 'Caleb', label: 'Caleb' },
+                          { value: 'Chase', label: 'Chase' },
+                          { value: 'Aidan', label: 'Aidan' },
+                          { value: 'Adrian', label: 'Adrian' },
+                          { value: 'Leo', label: 'Leo' },
+                        ].map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            <div className="flex justify-center items-center gap-4 text-logo">
+                              <img
+                                className="w-9"
+                                src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${option.value}`}
+                                alt="avatar"
+                              />
+                              {option.label}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {formState.errors?.avatar_url && (
+                      <p className="text-red-500">
+                        {t(
+                          formState.errors.avatar_url.message ??
+                            'validation.default-error'
+                        )}
+                      </p>
                     )}
-                  </p>
+                  </div>
                 )}
-              </div>
-            )}
-          />
-        </div>
-      </CardContent>
-      <CardFooter className="flex justify-end gap-2">
-        <Button
-          className="w-full rounded-2xl bg-primary"
-          onClick={handleSubmit(onSubmit)}
-        >
-          {t('submit')}
-        </Button>
-      </CardFooter>
-    </Card>
+              />
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-end gap-2">
+            <Button
+              className="w-full rounded-2xl bg-primary"
+              onClick={handleSubmit(onSubmit)}
+            >
+              {t('submit')}
+            </Button>
+          </CardFooter>
+        </Card>
+      </TabsContent>
+      <TabsContent value="messages" className="h-screen">
+        <PersonalMessages />
+      </TabsContent>
+    </Tabs>
   );
 };
 

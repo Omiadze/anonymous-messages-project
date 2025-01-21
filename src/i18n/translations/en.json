@@ -61,5 +61,6 @@
   "search": "Search...",
   "unspoken-words": "Unspoken Words",
   "passwords-dont-match": "Passwords do not match, Please ensure both password fields are identical.",
-  "invalid-credentials": "The email or password you entered is incorrect. Please try again."
+  "invalid-credentials": "The email or password you entered is incorrect. Please try again.",
+  "your-messages": "Your Messages"
 }

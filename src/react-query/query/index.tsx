@@ -1,5 +1,9 @@
 import { MessagesType } from '@/pages/home/components/messages/index.types';
-import { getMessages, getProfileInfo } from '@/supabase/profile';
+import {
+  getMessages,
+  getPersonalMessages,
+  getProfileInfo,
+} from '@/supabase/profile';
 import {
   useQuery,
   UseQueryOptions,
@@ -31,6 +35,13 @@ export const useGetProfileInfo = (
     queryKey: ['get-profile-info', userId],
     queryFn: () => getProfileInfo(userId || ''),
     ...queryOptions,
+  });
+};
+
+export const useGetPersonalMessages = (userId: string | undefined) => {
+  return useQuery({
+    queryKey: ['get-personal-messages', userId],
+    queryFn: () => getPersonalMessages(userId || ''),
   });
 };
 

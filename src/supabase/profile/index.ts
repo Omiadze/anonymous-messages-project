@@ -23,6 +23,23 @@ export const getProfileInfo = async (
   return undefined;
 };
 
+export const getPersonalMessages = async (
+  userId: string
+): Promise<MessagesType[]> => {
+  // Query to fetch messages for the specific user
+  const { data, error } = await supabase
+    .from('messages')
+    .select()
+    .eq('user_id', userId); // Filter messages by user_id
+
+  if (error) {
+    console.error('Error fetching personal messages:', error);
+    throw error;
+  }
+
+  return data || [];
+};
+
 export const postMessages = async (
   from: string,
   to: string,

@@ -9,31 +9,20 @@ import { Toaster } from './components/ui/toaster';
 function App() {
   const { handleSetUser } = useAuthContext();
   useEffect(() => {
-    const loadSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session) {
-        handleSetUser(session);
-        localStorage.setItem('userSession', JSON.stringify(session));
-      }
-    };
-
-    loadSession();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      handleSetUser(session);
+    });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log(session);
       handleSetUser(session);
-      if (session) {
-        localStorage.setItem('userSession', JSON.stringify(session));
-      } else {
-        localStorage.removeItem('userSession');
-      }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleSetUser]);
   return (
     <>
       <ThemeProvider>

@@ -33,7 +33,7 @@ function App() {
     });
 
     return () => subscription.unsubscribe();
-  }, [handleSetUser]);
+  }, []);
   return (
     <>
       <ThemeProvider>

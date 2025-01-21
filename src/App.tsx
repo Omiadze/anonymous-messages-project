@@ -11,6 +11,7 @@ function App() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       handleSetUser(session);
+      localStorage.setItem('userSession', JSON.stringify(session));
     });
 
     const {
@@ -18,6 +19,11 @@ function App() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       console.log(session);
       handleSetUser(session);
+      if (session) {
+        localStorage.setItem('userSession', JSON.stringify(session));
+      } else {
+        localStorage.removeItem('userSession');
+      }
     });
 
     return () => subscription.unsubscribe();

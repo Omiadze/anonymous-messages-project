@@ -6,8 +6,12 @@ import Skeleton from '@/components/skeleton';
 import MainGuard from '@/components/route-guards/main';
 
 const LazyHomePage = lazy(() => import('@/pages/home/views'));
-const LazyCreateMessages = lazy(() => import('@/pages/create-message/views'));
-const LazyProfilePage = lazy(() => import('@/pages/profile/views'));
+const LazyCreateMessages = lazy(
+  () => import('@/pages/create-message/components/create-message-form')
+);
+const LazyProfilePage = lazy(
+  () => import('@/pages/profile/components/profile-form')
+);
 
 export const MAIN_ROUTES = [
   <Route

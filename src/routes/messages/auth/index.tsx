@@ -4,8 +4,9 @@ import { lazy, Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { AUTH_PATHS } from '../index.enum';
 
-const LazyRegister = lazy(() => import('@/pages/register'));
-const LazyLogin = lazy(() => import('@/pages/login'));
+const LazyRegister = lazy(() => import('@/pages/register/views/index'));
+const LazyLogin = lazy(() => import('@/pages/login/views/index'));
+
 export const AUTH_ROUTES = [
   <Route
     path={AUTH_PATHS.REGISTER}

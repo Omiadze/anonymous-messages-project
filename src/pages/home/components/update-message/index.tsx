@@ -12,13 +12,19 @@ import { useUpdateMessage } from '@/react-query/mutation';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { MessagesType } from '../messages/index.types';
+import { MessagesValues } from '../types';
+import { AlertDialogTitle } from '@radix-ui/react-alert-dialog';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { messageValidationSchema } from './schema'; // Import the schema
 
 const UpdateMessage = ({ message }: { message: MessagesType }) => {
   const { t } = useTranslation();
-  console.log('message', message);
+  console.log('message', message.from);
+
   const { control, handleSubmit, formState } = useForm({
+    resolver: zodResolver(messageValidationSchema), // Use Zod resolver here
     defaultValues: {
-      from: message.from || undefined, // Convert null to undefined
+      from: message.from || undefined,
       to: message.to || undefined,
       message: message.message || undefined,
       avatar: message.avatar || undefined,
@@ -36,14 +42,7 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
 
   const { mutate: updateMessageMutate } = useUpdateMessage(onSuccess, onError);
 
-  const onSubmit = (values: {
-    from: string | undefined;
-    to: string | undefined;
-    message: string | undefined;
-    avatar: string | undefined;
-    user_id: string | undefined;
-  }) => {
-    console.log(values);
+  const onSubmit = (values: MessagesValues) => {
     if (message.id != null) {
       updateMessageMutate({
         messageId: message.id,
@@ -51,10 +50,12 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
       });
     }
   };
+
   return (
     <div>
       <AlertDialogContent>
         <AlertDialogHeader>
+          <AlertDialogTitle></AlertDialogTitle>
           <AlertDialogDescription className="flex flex-col gap-3">
             <div className="flex justify-start items-center gap-1">
               <label htmlFor="from" className="w-24 text-start">
@@ -63,15 +64,13 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
               <Controller
                 name="from"
                 control={control}
-                rules={{
-                  required: 'validation.from-required',
-                }}
                 render={({ field: { onChange, value } }) => (
                   <div className="">
                     <Input
                       placeholder={t('from-placeholder')}
                       onChange={onChange}
                       value={value}
+                      disabled={message.from === 'Anonymous'} // Add disabled property here
                       className="border border-muted-foreground"
                     />
                     {formState.errors?.from && (
@@ -88,19 +87,12 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
               />
             </div>
             <div className="flex justify-start items-center gap-1">
-              <label
-                htmlFor="to"
-                className="w-24 text-start
-          "
-              >
+              <label htmlFor="to" className="w-24 text-start">
                 {t('to')}
               </label>
               <Controller
                 name="to"
                 control={control}
-                rules={{
-                  required: 'validation.to-required',
-                }}
                 render={({ field: { onChange, value } }) => (
                   <div className="">
                     <Input
@@ -132,9 +124,6 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
               <Controller
                 name="message"
                 control={control}
-                rules={{
-                  required: t('validation.message-required'),
-                }}
                 render={({ field: { onChange, value } }) => (
                   <div className="w-full flex gap-2">
                     <Textarea

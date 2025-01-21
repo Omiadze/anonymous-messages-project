@@ -13,7 +13,8 @@ export const register = ({
       res?.error?.status &&
       (res?.error?.status < 200 || res?.error?.status >= 300)
     ) {
-      throw new Error('auth');
+      alert('Ops, something went wrong, try again!');
+      throw new Error('auth error');
     }
   });
 };
@@ -31,8 +32,7 @@ export const login = ({
       res?.error?.status &&
       (res?.error?.status < 200 || res?.error?.status >= 300)
     ) {
-      console.log(res?.error?.status);
-      throw new Error('auth');
+      throw new Error('auth error');
     }
     return {
       res,

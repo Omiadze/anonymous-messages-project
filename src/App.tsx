@@ -5,6 +5,7 @@ import AppRoutes from './routes';
 import { supabase } from './supabase';
 import { useEffect } from 'react';
 import { useAuthContext } from './context/hooks/use-auth-context';
+import { Toaster } from './components/ui/toaster';
 function App() {
   const { handleSetUser } = useAuthContext();
   useEffect(() => {
@@ -25,6 +26,7 @@ function App() {
   return (
     <>
       <ThemeProvider>
+        <Toaster />
         <AppRoutes />
       </ThemeProvider>
     </>

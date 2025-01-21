@@ -1,28 +1,52 @@
 import { MessagesType } from '@/pages/home/components/messages/index.types';
 import { getMessages, getProfileInfo } from '@/supabase/profile';
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery,
+  UseQueryOptions,
+  UseQueryResult,
+} from '@tanstack/react-query';
 
-export const useGetProfileInfo = (userId: string | number | undefined) => {
-  return useQuery({
+type MessagesData = {
+  messages: MessagesType[];
+  totalCount: number;
+};
+
+export type ProfileInfo = {
+  avatar_url: string | null;
+  full_name: string | null;
+  id: string | null;
+  updated_at: string | null;
+  username: string | null;
+  website: string | null;
+};
+
+export const useGetProfileInfo = (
+  userId: string | number | undefined,
+  queryOptions?: Omit<
+    UseQueryOptions<ProfileInfo | undefined, unknown, ProfileInfo>,
+    'queryKey'
+  >
+): UseQueryResult<ProfileInfo | undefined, unknown> => {
+  return useQuery<ProfileInfo | undefined, unknown>({
     queryKey: ['get-profile-info', userId],
     queryFn: () => getProfileInfo(userId || ''),
-    enabled: !!userId, // Ensures the query runs only when userId is defined
+    ...queryOptions,
   });
-};
-type MessagesData = {
-  messages: MessagesType[]; // Array of messages
-  totalCount: number; // Total count of messages
 };
 
 export const useMessages = (
   page: number,
   pageSize: number,
   searchText: string,
-  date: string
-) => {
-  return useQuery<MessagesData>({
+  date: string,
+  queryOptions?: Omit<
+    UseQueryOptions<MessagesData, unknown, MessagesData>,
+    'queryKey'
+  >
+): UseQueryResult<MessagesData, unknown> => {
+  return useQuery<MessagesData, unknown>({
     queryKey: ['get-messages', page, pageSize, searchText, date],
     queryFn: () => getMessages(page, pageSize, searchText, date),
-    //   keepPreviousData: true, // Keeps the previous page's data while fetching new data
+    ...queryOptions,
   });
 };

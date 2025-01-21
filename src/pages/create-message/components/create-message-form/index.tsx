@@ -16,6 +16,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { usePostMessages } from '@/react-query/mutation';
 import { useGetProfileInfo } from '@/react-query/query';
 import { useNavigate } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { messageSchema } from './schema';
 
 const CreateMessageView = () => {
   const { t } = useTranslation();
@@ -25,20 +27,21 @@ const CreateMessageView = () => {
   const { data, isSuccess } = useGetProfileInfo(user?.user.id);
 
   const { control, handleSubmit, formState, reset } = useForm({
+    resolver: zodResolver(messageSchema),
     defaultValues: {
       from: '',
       to: '',
       message: '',
-      avatar: data?.data?.[0]?.avatar_url || 'none',
+      avatar: data?.avatar_url || 'none',
       user_id: user?.user?.id || '',
     },
   });
 
   useEffect(() => {
-    if (isSuccess && data?.data?.[0]?.avatar_url) {
+    if (isSuccess && data?.avatar_url) {
       reset((formValues) => ({
         ...formValues,
-        avatar: data.data[0].avatar_url || 'none',
+        avatar: data.avatar_url || 'none',
       }));
     }
   }, [data, isSuccess, reset]);

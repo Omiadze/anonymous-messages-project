@@ -2,6 +2,7 @@ import { MessagesType } from '@/pages/home/components/messages/index.types';
 import { supabase } from '..';
 import { FillProfileInfoPayload } from './index.types';
 import dayjs from 'dayjs';
+import { ProfileInfo } from '@/react-query/query';
 
 export const fillProfileInfo = async (payload: FillProfileInfoPayload) => {
   const { error } = await supabase.from('profiles').upsert(payload);
@@ -9,8 +10,17 @@ export const fillProfileInfo = async (payload: FillProfileInfoPayload) => {
   return { success: true };
 };
 
-export const getProfileInfo = async (id: string | number) => {
-  return supabase.from('profiles').select('*').eq('id', id);
+export const getProfileInfo = async (
+  id: string | number
+): Promise<ProfileInfo | undefined> => {
+  const { data } = await supabase.from('profiles').select('*').eq('id', id);
+  const profile = data?.[0];
+
+  if (profile) {
+    return profile;
+  }
+
+  return undefined;
 };
 
 export const postMessages = async (

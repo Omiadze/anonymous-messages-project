@@ -20,7 +20,6 @@ const DeleteMessage = ({ messageId }: { messageId: number }) => {
     setTimeout(() => {
       window.location.reload();
     }, 500);
-    // Optionally trigger a refetch or update local state
   };
 
   const onDeleteError = () => {

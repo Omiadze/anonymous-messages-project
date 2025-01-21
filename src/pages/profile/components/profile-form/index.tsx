@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
-import { ProfileDefaultValues } from '../components/default-values';
+import { ProfileDefaultValues } from '../default-values';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
 import { useAuthContext } from '@/context/hooks/use-auth-context';
 import { useEffect } from 'react';
@@ -24,11 +24,15 @@ import {
 } from '@/components/ui/select';
 import { useGetProfileInfo } from '@/react-query/query';
 import { useFillProfileInfo } from '@/react-query/mutation';
+import { ProfileValues } from './types';
+import { ShieldQuestion } from 'lucide-react';
 
 const ProfilePage = () => {
+  const { t } = useTranslation();
   const { user } = useAuthContext();
-
-  const { data, isSuccess } = useGetProfileInfo(user?.user.id);
+  const { data, isSuccess } = useGetProfileInfo(user?.user.id, {
+    enabled: !!user?.user.id,
+  });
 
   const { mutate: handleFillProfileInfo } = useFillProfileInfo();
 
@@ -37,22 +41,16 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
-    if (isSuccess && data?.data?.length) {
+    if (isSuccess) {
       reset({
-        username: data.data[0]?.username || '',
-        full_name: data.data[0]?.full_name || '',
-        avatar_url: data.data[0]?.avatar_url || '',
+        username: data?.username || '',
+        full_name: data?.full_name || '',
+        avatar_url: data?.avatar_url || '',
       });
     }
   }, [isSuccess, data, reset]);
 
-  const { t } = useTranslation();
-
-  const onSubmit = (values: {
-    username: string;
-    full_name: string;
-    avatar_url: string;
-  }) => {
+  const onSubmit = (values: ProfileValues) => {
     const { username, full_name, avatar_url } = values;
     if (!user?.user.id) {
       console.log('user id is undefined!');
@@ -65,14 +63,21 @@ const ProfilePage = () => {
     <Card className="w-full mb- ">
       <CardHeader className="space-y-1 text-center flex flex-row gap-6 ">
         <div className="flex flex-col items-center gap-4">
-          <Avatar className="h-20 w-20 border-2 border-primary">
-            <AvatarImage
-              src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${data?.data?.[0]?.avatar_url}`}
-              alt="Profile Picture"
-            />
-            <AvatarFallback>
-              {data?.data?.[0]?.username || 'ANONYMOUS'}
-            </AvatarFallback>
+          <Avatar className="h-12 w-12 border-2 border-primary cursor-pointer rounded-full p-2 text-center">
+            {data?.avatar_url ? (
+              <AvatarImage
+                src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${data?.avatar_url || 'ANONYMOUS'}`}
+                alt="Profile Picture"
+              />
+            ) : (
+              <div className="flex justify-center items-center w-full">
+                <ShieldQuestion className="text-center" />
+              </div>
+            )}
+            {/* <AvatarImage
+                    src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${data?.data?.[0]?.avatar_url || 'ANONYMOUS'}`}
+                    alt="Profile Picture"
+                  /> */}
           </Avatar>
         </div>
         <div>

@@ -1,4 +1,3 @@
-import { login, register } from '@/supabase/auth';
 import {
   deleteMessage,
   fillProfileInfo,
@@ -68,31 +67,6 @@ export const useFillProfileInfo = () => {
     onSuccess: (data) => {
       console.log('Profile updated successfully:', data);
       window.location.reload();
-    },
-  });
-};
-
-export const useLogin = (onSuccessCallback: () => void) => {
-  return useMutation({
-    mutationKey: ['login'],
-    mutationFn: login,
-    onSuccess: (data) => {
-      console.log('User signed in:', data);
-      onSuccessCallback();
-    },
-  });
-};
-
-export const useRegister = (onSuccessCallback: () => void) => {
-  return useMutation({
-    mutationKey: ['register'],
-    mutationFn: register,
-    onSuccess: () => {
-      console.log('User registered successfully');
-      onSuccessCallback();
-    },
-    onError: (error) => {
-      console.error('Error registering user:', error);
     },
   });
 };

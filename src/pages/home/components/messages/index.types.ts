@@ -8,3 +8,7 @@ export type MessagesType = {
   user_id: string | null;
   likes: number | null;
 };
+
+export type MessagesSearchDefaultValue = {
+  searchText: string;
+};

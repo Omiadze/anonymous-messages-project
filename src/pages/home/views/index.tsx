@@ -10,7 +10,7 @@ const HomeView = () => {
           <CreateMessageBtn />
           <CalendarComponent />
         </div>
-        <div className="">
+        <div>
           <Messages />
         </div>
         <div className="hidden flex-col gap-3 sticky top-20 h-screen md:flex">

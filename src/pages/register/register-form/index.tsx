@@ -2,23 +2,28 @@ import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Controller, useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import { RegisterDefaultValues } from './default-values';
+
+import { RegisterDefaultValues } from '../default-values';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRegister } from '@/react-query/mutation';
+import { useRegister } from '@/react-query/mutation/auth';
 import { AUTH_PATHS } from '@/routes/messages/index.enum';
+import { RegisterSchema } from './schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 
 function Register() {
   const { t } = useTranslation();
   const { lang } = useParams();
   const navigate = useNavigate();
 
-  const { control, handleSubmit, formState } = useForm({
+  const { control, handleSubmit } = useForm({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: RegisterDefaultValues,
   });
 
   const { mutate: handleRegister } = useRegister(() => {
-    navigate(AUTH_PATHS.LOGIN);
+    toast(t('check-email'));
+    navigate(`/${lang}/${AUTH_PATHS.LOGIN}`);
   });
 
   const onSubmit = (data: {
@@ -29,7 +34,7 @@ function Register() {
     const { email, password, confirmPassword } = data;
 
     if (password !== confirmPassword) {
-      toast.error(t('passwords-dont-match'));
+      toast(t('passwords-dont-match'));
       return;
     }
 
@@ -41,8 +46,8 @@ function Register() {
     <div className="flex h-screen items-center justify-center ">
       <div className="w-full max-w-md rounded border-2 bg-card p-8 shadow">
         <div className="mb-8 flex flex-col items-center justify-center text-foreground ">
-          <h1 className="mb-4 text-center text-2xl font-bold">
-            {t('sign-up-title')}
+          <h1 className="mb-4 text-center text-2xl font-bold text-primary">
+            {t('unspoken-words')}
           </h1>
           <p>{t('sign-up-subtitle')}</p>
         </div>
@@ -51,28 +56,20 @@ function Register() {
           <Controller
             name="email"
             control={control}
-            rules={{
-              required: 'validation.email-required',
-
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: 'validation.email-invalid',
-              },
-            }}
-            render={({ field: { onChange, value } }) => (
+            render={({ field, fieldState }) => (
               <div className="w-full">
                 <Input
                   placeholder={t('email')}
-                  onChange={onChange}
-                  value={value}
-                  className="border border-muted-foreground"
+                  {...field}
+                  className={`border ${
+                    fieldState.error
+                      ? 'border-red-500'
+                      : 'border-muted-foreground'
+                  }`}
                 />
-                {formState.errors?.email && (
+                {fieldState.error && (
                   <p className="text-red-500">
-                    {t(
-                      formState.errors?.email?.message ??
-                        'validation.default-error'
-                    )}
+                    {t(fieldState.error.message ?? 'validation.default-error')}
                   </p>
                 )}
               </div>
@@ -83,17 +80,6 @@ function Register() {
           <Controller
             name="password"
             control={control}
-            rules={{
-              required: 'validation.password-required',
-              minLength: {
-                value: 6,
-                message: 'validation.password-min-length',
-              },
-              maxLength: {
-                value: 20,
-                message: 'validation.password-max-length',
-              },
-            }}
             render={({ field, fieldState }) => (
               <div className="w-full">
                 <Input
@@ -114,28 +100,18 @@ function Register() {
               </div>
             )}
           />
-          <label htmlFor="">Password</label>
+
+          <label htmlFor="">{t('confirm-password')}</label>
           <Controller
             name="confirmPassword"
             control={control}
-            rules={{
-              required: 'validation.password-required',
-              minLength: {
-                value: 6,
-                message: 'validation.password-min-length',
-              },
-              maxLength: {
-                value: 20,
-                message: 'validation.password-max-length',
-              },
-            }}
             render={({ field, fieldState }) => (
               <div className="w-full">
                 <Input
                   {...field}
-                  placeholder={t('password-placeholder')}
+                  placeholder={t('confirm-password-placeholder')}
                   type="password"
-                  className={`max-w-full border ${
+                  className={`border ${
                     fieldState.error
                       ? 'border-red-500'
                       : 'border-muted-foreground'

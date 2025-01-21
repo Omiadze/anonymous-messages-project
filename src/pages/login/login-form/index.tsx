@@ -1,39 +1,42 @@
 import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
-import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, Controller } from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { LoginDefaultValues } from './default-values';
-import { useLogin } from '@/react-query/mutation';
+import { LoginSchema } from './schema';
+import { useLogin } from '@/react-query/mutation/auth';
+import { LoginFormValues } from './types';
+import { MAIN_PATHS } from '@/routes/messages/index.enum';
+import { LoginDefaultValues } from '../default-values';
 
-type FormValues = {
-  email: string;
-  password: string;
-};
 function Login() {
   const { t } = useTranslation();
   const { lang } = useParams();
   const navigate = useNavigate();
 
-  const { control, handleSubmit, formState } = useForm<FormValues>({
+  const { control, handleSubmit, formState } = useForm<LoginFormValues>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: LoginDefaultValues,
   });
 
   const { mutate: handleLogin } = useLogin(() => {
-    navigate('/');
+    setTimeout(() => {
+      navigate(`/${lang}/${MAIN_PATHS.PROFILE}`);
+    }, 0);
   });
 
-  const onSubmit = (data: { email: string; password: string }) => {
+  const onSubmit = (data: LoginFormValues) => {
     const { email, password } = data;
     handleLogin({ email, password });
   };
 
   return (
-    <div className="flex h-screen items-center justify-center ">
+    <div className="flex h-screen items-center justify-center">
       <div className="max-w-md rounded border-2 bg-card p-8 shadow">
         <div className="mb-8 flex flex-col items-center justify-center text-foreground">
-          <h1 className="mb-4 text-center text-2xl font-bold">
-            {t('sign-in-title')}
+          <h1 className="mb-4 text-center text-2xl font-bold text-primary">
+            {t('unspoken-words')}
           </h1>
           <p>{t('sign-in-subtitle')}</p>
         </div>
@@ -42,20 +45,16 @@ function Login() {
           <Controller
             name="email"
             control={control}
-            rules={{
-              required: 'validation.email-required',
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: 'validation.email-invalid',
-              },
-            }}
-            render={({ field: { onChange, value } }) => (
+            render={({ field }) => (
               <div className="w-full">
                 <Input
+                  {...field}
                   placeholder={t('email')}
-                  onChange={onChange}
-                  value={value}
-                  className="border border-muted-foreground"
+                  className={`border ${
+                    formState.errors?.email
+                      ? 'border-red-500'
+                      : 'border-muted-foreground'
+                  }`}
                 />
                 {formState.errors?.email && (
                   <p className="text-red-500">
@@ -73,32 +72,24 @@ function Login() {
           <Controller
             name="password"
             control={control}
-            rules={{
-              required: 'validation.password-required',
-              minLength: {
-                value: 6,
-                message: 'validation.password-min-length',
-              },
-              maxLength: {
-                value: 20,
-                message: 'validation.password-max-length',
-              },
-            }}
-            render={({ field, fieldState }) => (
+            render={({ field }) => (
               <div className="w-full">
                 <Input
                   {...field}
                   type="password"
                   placeholder={t('password-placeholder')}
                   className={`border ${
-                    fieldState.error
+                    formState.errors?.password
                       ? 'border-red-500'
                       : 'border-muted-foreground'
                   }`}
                 />
-                {fieldState.error && (
+                {formState.errors?.password && (
                   <p className="text-sm text-red-500">
-                    {t(fieldState.error.message ?? 'validation.default-error')}
+                    {t(
+                      formState.errors?.password?.message ??
+                        'validation.default-error'
+                    )}
                   </p>
                 )}
               </div>

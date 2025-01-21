@@ -8,8 +8,8 @@ import {
 } from '@/components/ui/card';
 import { useAuthContext } from '@/context/hooks/use-auth-context';
 import { Avatar } from '@radix-ui/react-avatar';
-import { MessagesType } from './index.types';
-import { Heart, PencilIcon, ShieldQuestion } from 'lucide-react';
+import { MessagesSearchDefaultValue, MessagesType } from './index.types';
+import { Heart, MailQuestion, PencilIcon } from 'lucide-react';
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import UpdateMessage from '../update-message';
 import DeleteMessage from '../delete-message';
@@ -36,20 +36,17 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import dayjs from 'dayjs';
 
-type MessagesSearchDefaultValue = {
-  searchText: string;
-};
-
 const Messages = () => {
   const { lang } = useParams();
   const { user } = useAuthContext();
   const { t } = useTranslation();
+
   const [clicked, setClicked] = useState(false);
   const [date, setDate] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
   const parsedQueryParams = qs.parse(searchParams.toString());
+
   const onSuccess = () => {
-    console.log('Message updated successfully');
     refetch();
   };
 
@@ -71,7 +68,7 @@ const Messages = () => {
   });
 
   const [page, setPage] = useState(1);
-  const pageSize = 5;
+  const pageSize = 7;
 
   const { data, isLoading, error, refetch } = useMessages(
     page,
@@ -225,19 +222,14 @@ const Messages = () => {
 
                 <CardFooter className="flex mt-8 flex-col justify-between">
                   <Avatar className="h-12 w-12 border-2 border-primary cursor-pointer rounded-full p-2 text-center">
-                    {message.from === 'Anonymous' ? (
+                    {message.from === 'Anonymous' ||
+                    message.avatar === 'none' ? (
                       <div className="flex justify-center items-center">
-                        <ShieldQuestion className="text-center" />
+                        <MailQuestion className="w-4" />
                       </div>
                     ) : (
                       <AvatarImage
-                        src={
-                          message.avatar
-                            ? `https://api.dicebear.com/9.x/adventurer/svg?seed=${
-                                message.avatar
-                              }`
-                            : 'anonimous'
-                        }
+                        src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${message.avatar}`}
                         alt="avatar"
                       />
                     )}
@@ -259,7 +251,7 @@ const Messages = () => {
         next
       </Button> */}
           <Pagination>
-            <PaginationContent className="  h-20 flex justify-center w-full">
+            <PaginationContent className="flex justify-between items-center w-full  ">
               <PaginationItem>
                 <PaginationPrevious
                   href="#"
@@ -272,7 +264,7 @@ const Messages = () => {
                   "Previous"
                 </PaginationPrevious>
               </PaginationItem>
-              <div className="overflow-x-scroll pb-2 mt-3  flex   justify-center align-middle ">
+              <div className="overflow-x-scroll pb-2 mt-3 flex justify-center items-center ">
                 {[...Array(totalPages)].map((_, index) => (
                   <PaginationItem key={index}>
                     <PaginationLink
@@ -281,7 +273,7 @@ const Messages = () => {
                         e.preventDefault();
                         handlePageChange(index + 1);
                       }}
-                      className={page === index + 1 ? 'font-bold' : ''}
+                      className={page === index + 1 ? 'text-primary' : ''}
                     >
                       {index + 1}
                     </PaginationLink>

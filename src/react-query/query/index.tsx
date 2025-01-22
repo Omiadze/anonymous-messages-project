@@ -10,7 +10,7 @@ import {
   UseQueryResult,
 } from '@tanstack/react-query';
 
-type MessagesData = {
+export type MessagesData = {
   messages: MessagesType[];
   totalCount: number;
 };
@@ -38,10 +38,17 @@ export const useGetProfileInfo = (
   });
 };
 
-export const useGetPersonalMessages = (userId: string | undefined) => {
-  return useQuery({
+export const useGetPersonalMessages = (
+  userId: string | undefined,
+  queryOptions?: Omit<
+    UseQueryOptions<MessagesType[] | undefined, unknown, MessagesType[]>,
+    'queryKey'
+  >
+): UseQueryResult<MessagesType[] | undefined, unknown> => {
+  return useQuery<MessagesType[] | undefined, unknown>({
     queryKey: ['get-personal-messages', userId],
     queryFn: () => getPersonalMessages(userId || ''),
+    ...queryOptions,
   });
 };
 

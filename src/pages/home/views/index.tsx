@@ -6,7 +6,7 @@ const HomeView = () => {
   return (
     <>
       <div className="flex flex-col justify-around w-full md:flex-row  ">
-        <div className="flex-col gap-3 flex md:hidden mb-5 mt-3">
+        <div className="flex-col gap-3 flex md:hidden mb-10 mt-3 ">
           <CreateMessageBtn />
           <CalendarComponent />
         </div>

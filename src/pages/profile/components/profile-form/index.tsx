@@ -28,8 +28,10 @@ import { ProfileValues } from './types';
 import { ShieldQuestion } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PersonalMessages from '../personal-messages';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ProfileSchema } from './schema';
 
-const ProfilePage = () => {
+const ProfileForm = () => {
   const { t } = useTranslation();
   const { user } = useAuthContext();
   const { data, isSuccess } = useGetProfileInfo(user?.user.id, {
@@ -39,6 +41,7 @@ const ProfilePage = () => {
   const { mutate: handleFillProfileInfo } = useFillProfileInfo();
 
   const { control, handleSubmit, formState, reset } = useForm({
+    resolver: zodResolver(ProfileSchema),
     defaultValues: ProfileDefaultValues,
   });
 
@@ -53,14 +56,13 @@ const ProfilePage = () => {
   }, [isSuccess, data, reset]);
 
   const onSubmit = (values: ProfileValues) => {
-    const { username, full_name, avatar_url } = values;
     if (!user?.user.id) {
       console.log('user id is undefined!');
       return;
     }
-    console.log(username, full_name, avatar_url, user.user.id);
     handleFillProfileInfo({ ...values, id: user.user.id });
   };
+
   return (
     <Tabs defaultValue="account" className="w-[400px] h-screen">
       <TabsList className="grid w-full grid-cols-2 mb-7">
@@ -82,10 +84,6 @@ const ProfilePage = () => {
                     <ShieldQuestion className="text-center" />
                   </div>
                 )}
-                {/* <AvatarImage
-                    src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${data?.data?.[0]?.avatar_url || 'ANONYMOUS'}`}
-                    alt="Profile Picture"
-                  /> */}
               </Avatar>
             </div>
             <div>
@@ -105,7 +103,7 @@ const ProfilePage = () => {
                 render={({ field: { onChange, value } }) => (
                   <div className="w-full">
                     <Input
-                      placeholder={t('username')}
+                      placeholder={t('your-username')}
                       onChange={onChange}
                       value={value}
                       className="border border-muted-foreground"
@@ -166,8 +164,8 @@ const ProfilePage = () => {
                 render={({ field: { onChange, value } }) => (
                   <div className="w-full ">
                     <Select
-                      onValueChange={(selectedValue) => onChange(selectedValue)} // Correctly binds to onChange
-                      value={value} // Synchronizes with the controlled field value
+                      onValueChange={(selectedValue) => onChange(selectedValue)}
+                      value={value}
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select an avatar" />
@@ -238,4 +236,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default ProfileForm;

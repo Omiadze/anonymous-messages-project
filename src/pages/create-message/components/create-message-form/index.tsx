@@ -18,8 +18,9 @@ import { useGetProfileInfo } from '@/react-query/query';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { messageSchema } from './schema';
+import { toast } from 'sonner';
 
-const CreateMessageView = () => {
+const CreateMessageForm = () => {
   const { t } = useTranslation();
   const { user } = useAuthContext();
   const navigate = useNavigate();
@@ -64,8 +65,10 @@ const CreateMessageView = () => {
   };
 
   const onSuccess = () => {
-    alert('Message sent successfully!');
-    navigate('/');
+    toast('created');
+    setTimeout(() => {
+      navigate('/');
+    }, 500);
   };
 
   const onError = () => {
@@ -90,7 +93,7 @@ const CreateMessageView = () => {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full mb-56">
       <CardHeader className="space-y-1 text-center flex flex-row gap-6"></CardHeader>
       <CardContent className="grid gap-6">
         {/* Anonymous Toggle */}
@@ -211,4 +214,4 @@ const CreateMessageView = () => {
   );
 };
 
-export default CreateMessageView;
+export default CreateMessageForm;

@@ -12,11 +12,12 @@ import {
 import { useDeleteMessage } from '@/react-query/mutation';
 import { Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 const DeleteMessage = ({ messageId }: { messageId: number }) => {
   const { t } = useTranslation();
   const onDeleteSuccess = () => {
-    console.log('Message deleted successfully');
+    toast('Deleted');
     setTimeout(() => {
       window.location.reload();
     }, 500);

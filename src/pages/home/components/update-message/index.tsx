@@ -15,14 +15,14 @@ import { MessagesType } from '../messages/index.types';
 import { MessagesValues } from '../types';
 import { AlertDialogTitle } from '@radix-ui/react-alert-dialog';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { messageValidationSchema } from './schema'; // Import the schema
+import { messageValidationSchema } from './schema';
+import { toast } from 'sonner';
 
 const UpdateMessage = ({ message }: { message: MessagesType }) => {
   const { t } = useTranslation();
-  console.log('message', message.from);
 
   const { control, handleSubmit, formState } = useForm({
-    resolver: zodResolver(messageValidationSchema), // Use Zod resolver here
+    resolver: zodResolver(messageValidationSchema),
     defaultValues: {
       from: message.from || undefined,
       to: message.to || undefined,
@@ -33,7 +33,7 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
   });
 
   const onSuccess = () => {
-    console.log('Message updated successfully');
+    toast('Updated');
   };
 
   const onError = () => {
@@ -70,7 +70,7 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
                       placeholder={t('from-placeholder')}
                       onChange={onChange}
                       value={value}
-                      disabled={message.from === 'Anonymous'} // Add disabled property here
+                      disabled={message.from === 'Anonymous'}
                       className="border border-muted-foreground"
                     />
                     {formState.errors?.from && (
@@ -156,7 +156,7 @@ const UpdateMessage = ({ message }: { message: MessagesType }) => {
               handleSubmit(onSubmit)();
               setTimeout(() => {
                 window.location.reload();
-              }, 500); // Delay for 1 second
+              }, 500);
             }}
           >
             {t('update')}

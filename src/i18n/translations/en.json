@@ -15,7 +15,12 @@
     "password-required": "Password is required",
     "password-min-length": "Password must be at least 6 characters long",
     "password-max-length": "Password cannot exceed 20 characters",
-    "default-error": "Error"
+    "from-required": "The 'From' field is required",
+    "to-required": "The 'To' field is required",
+    "message-required": "The 'Message' field is required",
+    "username-required": "Username is required.",
+    "full_name-required": "Full name is required.",
+    "default-error": "An error occurred. Please try again."
   },
   "your-username": "Username:",
   "your-full_name": "Name and Lastname:",
@@ -43,6 +48,7 @@
   "from-placeholder": "Enter sender's name",
   "to-placeholder": "Enter recipient's name",
   "message-placeholder": "Write your message here...",
+  "full_name-placeholder": "Enter your full name",
   "add-your-message": "Add your message",
   "cancel": "Cancel",
   "update": "Update",
@@ -62,5 +68,8 @@
   "unspoken-words": "Unspoken Words",
   "passwords-dont-match": "Passwords do not match, Please ensure both password fields are identical.",
   "invalid-credentials": "The email or password you entered is incorrect. Please try again.",
-  "your-messages": "Your Messages"
+  "your-messages": "Your Messages",
+  "today": "Today",
+  "noMessagesYet": "You do not have any messages yet",
+  "noMessagesFound": "No messages found"
 }

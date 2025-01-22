@@ -26,7 +26,6 @@ import {
 } from '@/components/ui/pagination';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
-
 import { useParams, useSearchParams } from 'react-router-dom';
 import qs from 'qs';
 import debounce from 'lodash.debounce';
@@ -85,7 +84,7 @@ const Messages = () => {
     setSearchParams(qs.stringify({ searchText: value }, { skipNulls: true }));
   }, 300);
 
-  // Watch for searchText changes but delay updates
+  // Watch for searchText changes
   watch((value) => {
     const { searchText } = value;
     if (searchText && searchText !== searchTextFromParams) {
@@ -134,7 +133,7 @@ const Messages = () => {
               : 'hover:bg-logo hover:text-white'
           }
         >
-          Today
+          {t('today')}
         </Button>
         <Controller
           control={control}
@@ -155,12 +154,11 @@ const Messages = () => {
             );
           }}
         />
-        {/* <Button onClick={handleSubmit(onSubmit)}>Search</Button> */}
       </div>
       {isLoading ? (
         <Loading />
       ) : messages.length === 0 ? (
-        <p>No Messaes found</p>
+        <p>{t('noMessagesFound')}</p>
       ) : (
         <div>
           {messages?.map((message: MessagesType) => (
@@ -233,23 +231,12 @@ const Messages = () => {
                         alt="avatar"
                       />
                     )}
-
-                    {/* <AvatarFallback className="text-xs">ANONYMOUS</AvatarFallback> */}
                   </Avatar>
                 </CardFooter>
               </Card>
               <div className="h-3 w-full bg-primary rounded-b-md mb-6"></div>
             </div>
           ))}
-          {/* <Button onClick={handlePreviousPage} disabled={page === 1}>
-        prev
-      </Button>
-      <Button
-        onClick={handleNextPage}
-        disabled={messages ? messages?.length < pageSize : false}
-      >
-        next
-      </Button> */}
           <Pagination>
             <PaginationContent className="flex justify-between items-center w-full  ">
               <PaginationItem>

@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 export function CalendarComponent() {
   const [date, setDate] = useState<Date | undefined>(new Date());
-  console.log();
+
   return (
     <Calendar
       mode="single"

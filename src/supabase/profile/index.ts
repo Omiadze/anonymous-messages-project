@@ -25,8 +25,7 @@ export const getProfileInfo = async (
 
 export const getPersonalMessages = async (
   userId: string
-): Promise<MessagesType[]> => {
-  // Query to fetch messages for the specific user
+): Promise<MessagesType[] | undefined> => {
   const { data, error } = await supabase
     .from('messages')
     .select()
@@ -36,8 +35,10 @@ export const getPersonalMessages = async (
     console.error('Error fetching personal messages:', error);
     throw error;
   }
-
-  return data || [];
+  if (!data) {
+    return undefined;
+  }
+  return data;
 };
 
 export const postMessages = async (
@@ -65,7 +66,6 @@ export const getMessages = async (
   const offset = (page - 1) * pageSize;
   const filters = `message.ilike.%${searchText}%,from.ilike.%${searchText}%,to.ilike.%${searchText}%`;
 
-  // Initialize the query
   let query = supabase
     .from('messages')
     .select('*', { count: 'exact' })
@@ -80,7 +80,6 @@ export const getMessages = async (
     query = query.gte('created_at', todayStart).lt('created_at', todayEnd);
   }
 
-  // Execute the query
   const { data, error, count } = await query;
 
   if (error) {
@@ -117,5 +116,3 @@ export const updateMessage = async (
     .throwOnError();
   return { success: true };
 };
-
-// Mutation to handle liking a message

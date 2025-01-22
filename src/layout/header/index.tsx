@@ -2,11 +2,10 @@ import { ModeToggle } from '@/components/mode-toggle';
 import LanguageSwitcher from './components/language';
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/context/hooks/use-auth-context';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 import { logout } from '@/supabase/auth';
 import Logo from '@/assets/logo.png';
-import { getProfileInfo } from '@/supabase/profile';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { MAIN_PATHS } from '@/routes/messages/index.enum';
 import {
@@ -18,14 +17,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { LogOut, MailQuestion, ShieldQuestion } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useGetProfileInfo } from '@/react-query/query';
 
 const Header = () => {
   const { t } = useTranslation();
   const { user } = useAuthContext();
   const navigate = useNavigate();
+  const { lang } = useParams();
 
   const { mutate: handleLogout } = useMutation({
-    mutationKey: ['login'],
+    mutationKey: ['logout'],
     mutationFn: logout,
     onSuccess: () => {
       navigate('login');
@@ -33,7 +34,7 @@ const Header = () => {
   });
 
   const handleOnClickLogo = () => {
-    navigate('/en/');
+    navigate(`/${lang}/`);
     window.location.reload();
   };
 
@@ -41,13 +42,9 @@ const Header = () => {
     navigate(MAIN_PATHS.PROFILE);
   };
 
-  const { data } = useQuery({
-    queryKey: ['get-profile-info', user?.user.id],
-    queryFn: () => getProfileInfo(user ? user?.user.id : ''),
+  const { data } = useGetProfileInfo(user?.user.id, {
     enabled: !!user?.user.id,
   });
-
-  console.log('dataaaaaaa', data ? data?.avatar_url : '');
 
   return (
     <div className="flex justify-between items-center shadow-lg dark:bg-bg p-3">
@@ -176,8 +173,6 @@ const Header = () => {
                 </DropdownMenuItem>
               </>
             )}
-
-            {/* <DropdownMenuItem>Add Question</DropdownMenuItem> only appears if user is logged in */}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

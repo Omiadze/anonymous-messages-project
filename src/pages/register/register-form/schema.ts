@@ -16,7 +16,3 @@ export const RegisterSchema = z.object({
     .min(6, { message: 'validation.password-min-length' })
     .max(20, { message: 'validation.password-max-length' }),
 });
-// .refine((data) => data.password === data.confirmPassword, {
-//   path: ['confirmPassword'],
-//   message: 'validation.passwords-dont-match',
-// });

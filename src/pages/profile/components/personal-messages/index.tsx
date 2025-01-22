@@ -1,3 +1,4 @@
+import Loading from '@/components/loading';
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -21,8 +22,15 @@ const PersonalMessages = () => {
   const { t } = useTranslation();
   const { lang } = useParams();
   const { user } = useAuthContext();
-  console.log(user?.user?.id);
-  const { data } = useGetPersonalMessages(user?.user?.id);
+
+  const { data, isLoading } = useGetPersonalMessages(user?.user?.id);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (data?.length === 0) {
+    return <p>{t('noMessagesYet')}</p>;
+  }
   console.log(data ? data : 'll');
   return (
     <div className="h-[650px] overflow-auto pb-4">
@@ -84,59 +92,6 @@ const PersonalMessages = () => {
           <div className="h-3 w-full bg-primary rounded-b-md mb-6"></div>
         </div>
       ))}
-      {/* <Button onClick={handlePreviousPage} disabled={page === 1}>
-prev
-</Button>
-<Button
-onClick={handleNextPage}
-disabled={messages ? messages?.length < pageSize : false}
->
-next
-</Button> */}
-      {/* <Pagination>
-        <PaginationContent className="flex justify-between items-center w-full  ">
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={handlePreviousPage}
-              className={`${
-                page === 1 ? 'cursor-not-allowed opacity-50  ' : ''
-              }`}
-              aria-disabled={page === 1}
-            >
-              "Previous"
-            </PaginationPrevious>
-          </PaginationItem>
-          <div className="overflow-x-scroll pb-2 mt-3 flex justify-center items-center ">
-            {[...Array(totalPages)].map((_, index) => (
-              <PaginationItem key={index}>
-                <PaginationLink
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handlePageChange(index + 1);
-                  }}
-                  className={page === index + 1 ? 'text-primary' : ''}
-                >
-                  {index + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-          </div>
-          <PaginationItem>
-            <PaginationNext
-              href="#"
-              onClick={handleNextPage}
-              className={`${
-                page === totalPages ? 'cursor-not-allowed opacity-50 p-0' : ''
-              } `}
-              aria-disabled={page === totalPages}
-            >
-              "Next"
-            </PaginationNext>
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination> */}
     </div>
   );
 };

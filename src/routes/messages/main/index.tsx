@@ -7,11 +7,9 @@ import MainGuard from '@/components/route-guards/main';
 
 const LazyHomePage = lazy(() => import('@/pages/home/views'));
 const LazyCreateMessages = lazy(
-  () => import('@/pages/create-message/components/create-message-form')
+  () => import('@/pages/create-message/views/index')
 );
-const LazyProfilePage = lazy(
-  () => import('@/pages/profile/components/profile-form')
-);
+const LazyProfilePage = lazy(() => import('@/pages/profile/views/index'));
 
 export const MAIN_ROUTES = [
   <Route
@@ -26,7 +24,9 @@ export const MAIN_ROUTES = [
     path={MAIN_PATHS.MESSAGES_CREATE}
     element={
       <Suspense fallback={<Skeleton />}>
-        <LazyCreateMessages />
+        <MainGuard>
+          <LazyCreateMessages />
+        </MainGuard>
       </Suspense>
     }
   />,

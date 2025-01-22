@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Controller, useForm } from 'react-hook-form';
-
+import Logo from '@/assets/logo.png';
 import { RegisterDefaultValues } from '../default-values';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRegister } from '@/react-query/mutation/auth';
@@ -37,18 +37,28 @@ function Register() {
       toast(t('passwords-dont-match'));
       return;
     }
-
     handleRegister({ email, password });
-    console.log(email, password);
   };
 
   return (
     <div className="flex h-screen items-center justify-center ">
       <div className="w-full max-w-md rounded border-2 bg-card p-8 shadow">
         <div className="mb-8 flex flex-col items-center justify-center text-foreground ">
-          <h1 className="mb-4 text-center text-2xl font-bold text-primary">
-            {t('unspoken-words')}
-          </h1>
+          <div className="flex justify-center items-center">
+            <img
+              src={Logo}
+              alt="Logo"
+              className="w-10 h-10 hover:cursor-pointer"
+            />
+            <h1 className=" text-center text-2xl font-bold text-primary">
+              {t('unspoken-words')}
+            </h1>
+            <img
+              src={Logo}
+              alt="Logo"
+              className="w-10 h-10 hover:cursor-pointer"
+            />
+          </div>
           <p>{t('sign-up-subtitle')}</p>
         </div>
         <div className="flex flex-col items-center justify-center gap-4 text-muted-foreground">
@@ -137,7 +147,7 @@ function Register() {
         {/* Link to Login */}
         <p className="mt-4 text-center text-sm text-foreground">
           {t('already-have-account')}{' '}
-          <a href={`/${lang}/login`} className="text-logo">
+          <a href={`/${lang}/${AUTH_PATHS.LOGIN}`} className="text-logo">
             {t('sign-in')}
           </a>
         </p>

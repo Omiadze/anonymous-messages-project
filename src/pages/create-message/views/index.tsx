@@ -1,7 +1,11 @@
 import CreateMessageForm from '../components/create-message-form';
 
 const CreateMessagePage = () => {
-  return <CreateMessageForm />;
+  return (
+    <div className="h-screen w-full">
+      <CreateMessageForm />
+    </div>
+  );
 };
 
 export default CreateMessagePage;

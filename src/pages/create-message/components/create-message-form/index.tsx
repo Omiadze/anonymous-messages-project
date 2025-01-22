@@ -93,7 +93,7 @@ const CreateMessageForm = () => {
   };
 
   return (
-    <Card className="w-full mb-56">
+    <Card className="w-full ">
       <CardHeader className="space-y-1 text-center flex flex-row gap-6"></CardHeader>
       <CardContent className="grid gap-6">
         {/* Anonymous Toggle */}

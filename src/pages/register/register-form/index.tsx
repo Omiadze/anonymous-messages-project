@@ -22,7 +22,12 @@ function Register() {
   });
 
   const { mutate: handleRegister } = useRegister(() => {
-    toast(t('check-email'));
+    toast(t('check-email'), {
+      style: {
+        color: 'red',
+        fontWeight: 'bold',
+      },
+    });
     navigate(`/${lang}/${AUTH_PATHS.LOGIN}`);
   });
 

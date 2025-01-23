@@ -99,11 +99,9 @@ const Messages = () => {
   if (error) return <p>Failed to load messages</p>;
 
   const handleLike = (messageId: number, likes: number) => {
-    console.log('Message ID:', messageId);
-    console.log('Current Likes:', likes);
     const newLikes = likes ? likes + 1 : 1; // Avoid `null`
-    console.log('New Likes:', newLikes);
     const values = { likes: newLikes };
+
     if (messageId != null) {
       updateMessageMutate({
         messageId: messageId,
@@ -111,14 +109,13 @@ const Messages = () => {
       });
     }
   };
+
   const handleBtnClick = () => {
     const todayDate = dayjs().format('YYYY-MM-DD');
     if (clicked == false) {
       setDate(() => todayDate);
     } else setDate(() => '');
     setClicked((prevState) => !prevState);
-    console.log(clicked);
-    console.log(date);
   };
 
   return (

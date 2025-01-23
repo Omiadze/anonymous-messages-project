@@ -71,5 +71,6 @@
   "your-messages": "Your Messages",
   "today": "Today",
   "noMessagesYet": "You do not have any messages yet",
-  "noMessagesFound": "No messages found"
+  "noMessagesFound": "No messages found",
+  "check-email": "Check your email"
 }

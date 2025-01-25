@@ -29,7 +29,8 @@ export const getPersonalMessages = async (
   const { data, error } = await supabase
     .from('messages')
     .select()
-    .eq('user_id', userId); // Filter messages by user_id
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
 
   if (error) {
     console.error('Error fetching personal messages:', error);
@@ -86,8 +87,6 @@ export const getMessages = async (
     console.error('Error fetching messages:', error);
     throw error;
   }
-
-  console.log('Fetched messages:', data);
 
   return {
     messages: data,

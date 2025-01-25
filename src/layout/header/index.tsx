@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { logout } from '@/supabase/auth';
 import Logo from '@/assets/logo.png';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { MAIN_PATHS } from '@/routes/messages/index.enum';
+import { AUTH_PATHS, MAIN_PATHS } from '@/routes/messages/index.enum';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,13 +29,12 @@ const Header = () => {
     mutationKey: ['logout'],
     mutationFn: logout,
     onSuccess: () => {
-      navigate('login');
+      navigate(AUTH_PATHS.LOGIN);
     },
   });
 
   const handleOnClickLogo = () => {
     navigate(`/${lang}/`);
-    window.location.reload();
   };
 
   const navigateToProfile = () => {

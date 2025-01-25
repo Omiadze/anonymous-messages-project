@@ -216,19 +216,18 @@ const Messages = () => {
                 </div>
 
                 <CardFooter className="flex mt-8 flex-col justify-between">
-                  <Avatar className="h-12 w-12 border-2 border-primary cursor-pointer rounded-full p-2 text-center">
-                    {message.from === 'Anonymous' ||
-                    message.avatar === 'none' ? (
-                      <div className="flex justify-center items-center">
-                        <MailQuestion className="w-4" />
-                      </div>
-                    ) : (
+                  {message.from === 'Anonymous' || message.avatar === 'none' ? (
+                    <div className="flex justify-center items-center">
+                      <MailQuestion className="w-4" />
+                    </div>
+                  ) : (
+                    <Avatar className="h-12 w-12 border-2 border-primary cursor-pointer rounded-full p-2 text-center">
                       <AvatarImage
                         src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${message.avatar}`}
                         alt="avatar"
                       />
-                    )}
-                  </Avatar>
+                    </Avatar>
+                  )}
                 </CardFooter>
               </Card>
               <div className="h-3 w-full bg-primary rounded-b-md mb-6"></div>
@@ -267,7 +266,7 @@ const Messages = () => {
               <PaginationItem>
                 <PaginationNext
                   href="#"
-                  onClick={handleNextPage}
+                  onClick={page !== totalPages ? handleNextPage : undefined}
                   className={`${
                     page === totalPages
                       ? 'cursor-not-allowed opacity-50 p-0'
@@ -275,7 +274,7 @@ const Messages = () => {
                   } `}
                   aria-disabled={page === totalPages}
                 >
-                  "Next"
+                  Next
                 </PaginationNext>
               </PaginationItem>
             </PaginationContent>

@@ -14,7 +14,7 @@ const CreateMessageBtn = () => {
     <Button
       onClick={handleOnCLick}
       variant={'outline'}
-      className="border-dotted border-2 border-logo text-primary"
+      className="border-dotted border-2 border-logo text-primary hover:text-primary"
     >
       <DiamondPlus />
       {t('add-your-message')}

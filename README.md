@@ -12,7 +12,6 @@ Unspoken Words is a platform for sharing messages—either anonymously or with a
 - **Vite** (for faster build times)
 - **Tailwind CSS** (for styling)
 - **Shadcn UI** (for UI components)
-- **HTTP Client**: Axios
 - **React Query & Mutation** (for data fetching and handling CRUD operations)
 - **Zod** (for form validation)
 - **React Router Dom** (for routing)
